@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.GENERALIST",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.GEN.10.MISSING.NONCRITICAL",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.10.MISSING.NONCRITICAL"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "EVIDENCE_COMPLETENESS",
+      "rationale": "Evidence is incomplete, so the request cannot proceed without a person.",
+      "confidence": 71,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.10.MISSING.NONCRITICAL",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

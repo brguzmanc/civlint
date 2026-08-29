@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.12.STRUCTURE",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.12.STRUCTURE"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "The requested value contains the recorded value as a prefix, so it looks like the same name.",
+      "confidence": 55,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.12.STRUCTURE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

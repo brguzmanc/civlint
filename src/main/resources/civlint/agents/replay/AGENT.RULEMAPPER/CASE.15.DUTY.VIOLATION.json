@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.15.DUTY.VIOLATION",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NOSOD"
+      },
+      "proposedTier": "AUTO_WITH_EXCEPTION",
+      "category": "SEPARATION_OF_DUTIES",
+      "rationale": "Approval was reassigned to another role.",
+      "confidence": 52,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

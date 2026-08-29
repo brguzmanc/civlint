@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.10.MISSING.NONCRITICAL",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.10.MISSING.NONCRITICAL"
+      },
+      "proposedTier": "AUTO_WITH_EXCEPTION",
+      "category": "EVIDENCE_COMPLETENESS",
+      "rationale": "An authoritative source is present but a supporting document is absent.",
+      "confidence": 74,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.10.MISSING.NONCRITICAL",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

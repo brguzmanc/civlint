@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.GENERALIST",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.GEN.01.COMPLETE",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.01.COMPLETE"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "Nothing appears to be in dispute and the evidence is complete.",
+      "confidence": 88,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.01.COMPLETE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.GENERALIST",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.GEN.09.RENEWED.DOCUMENT",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.09.RENEWED.DOCUMENT"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "Only the document reference changed.",
+      "confidence": 77,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.09.RENEWED.DOCUMENT",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

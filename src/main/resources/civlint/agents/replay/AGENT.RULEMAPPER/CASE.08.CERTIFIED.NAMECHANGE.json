@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.08.CERTIFIED.NAMECHANGE",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.08.CERTIFIED.NAMECHANGE"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "A certified order accompanies the request, so the change appears fully supported.",
+      "confidence": 61,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.08.CERTIFIED.NAMECHANGE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

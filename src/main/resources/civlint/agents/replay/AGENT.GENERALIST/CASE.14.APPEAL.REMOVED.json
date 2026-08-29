@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.GENERALIST",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.GEN.14.APPEAL.REMOVED",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NOAPPEAL"
+      },
+      "proposedTier": "RELEASE_BLOCKED",
+      "category": "APPEAL_RIGHTS",
+      "rationale": "The appeal step is gone from the proposed procedure, which looks like a loss of a safeguard.",
+      "confidence": 74,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.GENERALIST",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.GEN.02.DIACRITIC",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.02.DIACRITIC"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "IDENTITY_CONSISTENCY",
+      "rationale": "The given name is spelled differently from the register, so a person should confirm it.",
+      "confidence": 64,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.02.DIACRITIC",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

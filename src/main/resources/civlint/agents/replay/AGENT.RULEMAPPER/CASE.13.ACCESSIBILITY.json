@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.13.ACCESSIBILITY",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.13.ACCESSIBILITY"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "ACCESSIBILITY",
+      "rationale": "An accommodation and alternative evidence were both offered.",
+      "confidence": 83,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.13.ACCESSIBILITY",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

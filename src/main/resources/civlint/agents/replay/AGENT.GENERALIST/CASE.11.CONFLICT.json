@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.GENERALIST",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.GEN.11.CONFLICT",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.11.CONFLICT"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "IDENTITY_CONSISTENCY",
+      "rationale": "The two registry entries disagree about the surname.",
+      "confidence": 84,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.11.CONFLICT",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.11.CONFLICT",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.11.CONFLICT"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "IDENTITY_CONSISTENCY",
+      "rationale": "Two authoritative sources state different surnames.",
+      "confidence": 80,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.11.CONFLICT",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

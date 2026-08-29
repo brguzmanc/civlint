@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.REPAIR",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RA.15.DUTY.VIOLATION",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NOSOD"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "SEPARATION_OF_DUTIES",
+      "rationale": "Smallest safe repair: return the approval step to a role other than the preparing role. Reassigning preparation instead would also satisfy the constraint but moves more of the procedure than necessary.",
+      "confidence": 90,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

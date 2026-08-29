@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.GENERALIST",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.GEN.04.DUPLICATE.CLERICAL",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NATIONAL"
+      },
+      "proposedTier": "AUTO_WITH_EXCEPTION",
+      "category": "MECHANICAL",
+      "rationale": "Steps were removed from the procedure; someone should look over the change.",
+      "confidence": 58,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+name: CivLint quality gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: civlint-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Verify toolchain
+        run: |
+          java -version
+          chmod +x mvnw
+          ./mvnw -version
+
+      - name: Run complete quality gate
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify
+
+      - name: Generate Javadoc
+        run: ./mvnw --batch-mode --no-transfer-progress javadoc:javadoc
+
+      - name: Verify packaged Tomcat patch level
+        shell: bash
+        run: |
+          mapfile -t actual < <(
+            jar tf target/civlint-0.1.0.jar |
+            grep -E '^BOOT-INF/lib/tomcat-embed-(core|el|websocket)-.*\.jar$' |
+            sort
+          )
+
+          expected=(
+            'BOOT-INF/lib/tomcat-embed-core-11.0.25.jar'
+            'BOOT-INF/lib/tomcat-embed-el-11.0.25.jar'
+            'BOOT-INF/lib/tomcat-embed-websocket-11.0.25.jar'
+          )
+
+          diff -u \
+            <(printf '%s\n' "${expected[@]}") \
+            <(printf '%s\n' "${actual[@]}")
+
+      - name: Upload verification reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: civlint-quality-${{ github.run_id }}
+          path: |
+            target/surefire-reports/
+            target/failsafe-reports/
+            target/site/jacoco/
+            target/site/apidocs/
+          if-no-files-found: warn
+          retention-days: 14

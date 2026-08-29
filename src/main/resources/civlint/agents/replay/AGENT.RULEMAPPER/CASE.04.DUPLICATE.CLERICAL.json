@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.04.DUPLICATE.CLERICAL",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NATIONAL"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "The second clerical read repeats the first with the same role and checklist.",
+      "confidence": 70,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.BOUNDARY",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.BC.14.APPEAL.REMOVED",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NOAPPEAL"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "APPEAL_RIGHTS",
+      "rationale": "The appeal adjudication step is absent from the proposed version.",
+      "confidence": 89,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

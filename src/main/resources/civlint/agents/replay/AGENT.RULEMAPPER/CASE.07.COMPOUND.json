@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.07.COMPOUND",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.07.COMPOUND"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "Hyphen and space are interchangeable compound joiners.",
+      "confidence": 82,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.07.COMPOUND",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

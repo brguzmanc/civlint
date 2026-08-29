@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<!--
+  CivLint dashboard. Author: Buddy Guzman (bguzman)
+  All data shown is synthetic and describes a fictional Federated Civil Registry.
+
+  Server-rendered Thymeleaf over semantic HTML with one local stylesheet. No script element, no
+  inline style, no external asset and no client-side state: this page is a read-only evidence view,
+  and every value on it comes from the model as escaped text.
+-->
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="author" content="Buddy Guzman (bguzman)"/>
+  <meta name="description"
+        content="CivLint: deterministic regression and human-judgment review for public
+                 procedures. Synthetic demonstration data only."/>
+  <meta name="robots" content="noindex"/>
+  <title>CivLint — procedure regression and human-judgment review</title>
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
+  <!-- An empty inline icon. The project ships no image asset, and without this every page load
+       produces a 404 for /favicon.ico and a browser console error. -->
+  <link rel="icon" href="data:,"/>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header class="masthead">
+  <div class="shell masthead-inner">
+    <div class="wordmark">
+      <span class="wordmark-mark" aria-hidden="true">CL</span>
+      <div class="wordmark-text">
+        <span class="eyebrow">Public-procedure assurance</span>
+        <h1>CivLint</h1>
+      </div>
+    </div>
+    <p class="lede">Deterministic regression and human-judgment review for public procedures.
+      Agents propose observations; a deterministic verifier decides what ships.</p>
+    <p class="byline"><span class="byline-label">Author:</span> Buddy Guzman (bguzman)</p>
+  </div>
+</header>
+
+<main id="main-content" class="shell">
+
+  <div class="notice">
+    <strong class="notice-title">Synthetic demonstration data.</strong>
+    <p>Every procedure, policy citation, role, region and applicant record below is invented for a
+      fictional Federated Civil Registry. Nothing here represents real law, a real government body,
+      or any real person's record. Data mode: <code>DEMO</code>.</p>
+  </div>
+
+  <section id="summary" class="panel" aria-labelledby="summary-heading"
+           th:with="oracleBaseline=${baseline.metric('M.ORACLE.AGREEMENT').orElse(null)},
+                    oracleAdvanced=${advanced.metric('M.ORACLE.AGREEMENT').orElse(null)},
+                    unsafeRemovals=${advanced.metric('M.GATES.UNSAFE.REMOVALS').orElse(null)},
+                    touchReduction=${advanced.metric('M.HUMAN.TOUCH.REDUCTION').orElse(null)}">
+    <span class="eyebrow">Executive summary</span>
+    <h2 id="summary-heading">Result of this evaluation</h2>
+    <dl class="summary-grid">
+
+      <div class="summary-card">
+        <dt class="summary-label">Primary proposal outcome</dt>
+        <dd class="summary-value">
+          <span class="tier"
+                th:classappend="${advanced.releaseDecision().outcome()}"
+                th:text="${advanced.releaseDecision().outcome()}"></span>
+          <span class="summary-note">Deterministic verifier decision for
+            <span th:text="${advanced.proposedVersionId()}"></span>.</span>
+        </dd>
+      </div>
+
+      <div class="summary-card">
+        <dt class="summary-label">Baseline oracle agreement</dt>
+        <dd class="summary-value"
+            th:classappend="${oracleBaseline == null or !oracleBaseline.measured()} ? 'unavailable' : ''">
+          <span th:text="${oracleBaseline != null ? oracleBaseline.display() : 'UNAVAILABLE'}"></span>
+          <span class="summary-note"
+                th:text="${oracleBaseline != null ? oracleBaseline.label()
+                          : 'This metric was not published for the baseline run.'}"></span>
+        </dd>
+      </div>
+
+      <div class="summary-card">
+        <dt class="summary-label">Advanced oracle agreement</dt>
+        <dd class="summary-value"
+            th:classappend="${oracleAdvanced == null or !oracleAdvanced.measured()} ? 'unavailable' : ''">
+          <span th:text="${oracleAdvanced != null ? oracleAdvanced.display() : 'UNAVAILABLE'}"></span>
+          <span class="summary-note"
+                th:text="${oracleAdvanced != null ? oracleAdvanced.label()
+                          : 'This metric was not published for the advanced run.'}"></span>
+        </dd>
+      </div>
+
+      <div class="summary-card">
+        <dt class="summary-label">Advanced unsafe gate removals</dt>
+        <dd class="summary-value"
+            th:classappend="${unsafeRemovals == null or !unsafeRemovals.measured()} ? 'unavailable' : ''">
+          <span th:text="${unsafeRemovals != null ? unsafeRemovals.display() : 'UNAVAILABLE'}"></span>
+          <span class="summary-note"
+                th:text="${unsafeRemovals != null ? unsafeRemovals.label()
+                          : 'This metric was not published for the advanced run.'}"></span>
+        </dd>
+      </div>
+
+      <div class="summary-card">
+        <dt class="summary-label">Verified human-touch reduction</dt>
+        <dd class="summary-value"
+            th:classappend="${touchReduction == null or !touchReduction.measured()} ? 'unavailable' : ''">
+          <span th:text="${touchReduction != null ? touchReduction.display() : 'UNAVAILABLE'}"></span>
+          <span class="summary-note"
+                th:text="${touchReduction != null ? touchReduction.label()
+                          : 'This metric was not published for the advanced run.'}"></span>
+        </dd>
+      </div>
+
+    </dl>
+    <p class="prose note">Every figure above is read from the same run that produced the evidence
+      sections below. A metric that could not be computed is reported as
+      <code>UNAVAILABLE</code> with its reason rather than defaulted to zero.</p>
+  </section>
+
+  <nav class="site-nav panel" aria-labelledby="section-nav-heading">
+    <h2 id="section-nav-heading">Evidence sections</h2>
+    <ul class="nav-list">
+      <li><a class="nav-link" href="#overview">Primary outcome</a></li>
+      <li><a class="nav-link" href="#metrics">Baseline vs advanced</a></li>
+      <li><a class="nav-link" href="#findings">Findings</a></li>
+      <li><a class="nav-link" href="#traces">Agent trajectories</a></li>
+      <li><a class="nav-link" href="#comparison">Version comparison</a></li>
+      <li><a class="nav-link" href="#hnm">Human Necessity Map</a></li>
+      <li><a class="nav-link" href="#counterexamples">Counterexamples</a></li>
+      <li><a class="nav-link" href="#repro">Reproducibility</a></li>
+    </ul>
+  </nav>
+
+  <section id="overview" class="panel" aria-labelledby="overview-heading">
+    <span class="eyebrow">Primary proposal</span>
+    <h2 id="overview-heading">Overview</h2>
+    <dl class="kv">
+      <dt>Procedure</dt>
+      <dd><code th:text="${advanced.existingVersionId()}"></code> &#8594;
+          <code th:text="${advanced.proposedVersionId()}"></code></dd>
+      <dt>Primary proposal release decision</dt>
+      <dd>
+        <span class="tier"
+              th:classappend="${advanced.releaseDecision().blocked()} ? 'RELEASE_BLOCKED' : 'AUTOMATE'"
+              th:text="${advanced.releaseDecision().outcome()}"></span>
+        <span class="outcome" th:text="${advanced.releaseDecision().rationale()}"></span>
+      </dd>
+      <dt>Unsafe-scenario blocking findings</dt>
+      <dd th:text="${#lists.size(blocking)}"></dd>
+      <dt>Total findings</dt>
+      <dd th:text="${#lists.size(advanced.findings())}"></dd>
+    </dl>
+    <p class="prose note"><em>The release-blocking findings belong to deliberately unsafe variants in
+      the fixed case set. The primary proposed version itself carries no blocking finding — see the
+      <code>M.PRIMARY.BLOCKING.FINDINGS</code> metric below.</em></p>
+  </section>
+
+  <section id="metrics" class="panel" aria-labelledby="metrics-heading">
+    <span class="eyebrow">Architecture comparison</span>
+    <h2 id="metrics-heading">Baseline versus advanced</h2>
+    <p class="prose">Both architectures ran the same fifteen cases against the same locked oracle.</p>
+    <p class="table-caption" id="cap-metrics">Published metrics for the baseline and the advanced architecture, side by side.</p>
+    <div class="table-scroll t-wide" tabindex="0">
+      <table aria-labelledby="cap-metrics">
+        <thead>
+          <tr>
+            <th scope="col">Metric</th>
+            <th scope="col">Baseline</th>
+            <th scope="col">Advanced</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="metric : ${advanced.metrics()}">
+            <th scope="row" th:text="${metric.label()}"></th>
+            <td class="numeric">
+              <span th:classappend="${baseline.metric(metric.metricId()).isPresent()
+                        and !baseline.metric(metric.metricId()).get().measured()} ? 'unavailable' : ''"
+                    th:text="${baseline.metric(metric.metricId()).isPresent()
+                        ? baseline.metric(metric.metricId()).get().display() : '—'}"></span>
+            </td>
+            <td class="numeric">
+              <span th:classappend="${!metric.measured()} ? 'unavailable' : ''"
+                    th:text="${metric.display()}"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary>Per-case agreement with the locked oracle
+        <span class="disclosure-count">(<span th:text="${#lists.size(cases)}"></span> cases)</span>
+      </summary>
+      <div class="details-body">
+        <p class="table-caption" id="cap-percase">Decided tier and required reviewer role for every case, against the locked oracle.</p>
+        <div class="table-scroll t-wide" tabindex="0">
+          <table aria-labelledby="cap-percase">
+            <thead>
+              <tr>
+                <th scope="col">Case</th>
+                <th scope="col">Oracle</th>
+                <th scope="col">Baseline</th>
+                <th scope="col">Advanced</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="c : ${cases}">
+                <th scope="row">
+                  <code class="case-id" th:text="${c.caseId()}"></code>
+                  <span class="case-title" th:text="${c.title()}"></span>
+                </th>
+                <td>
+                  <span class="tier" th:classappend="${c.oracleTier()}" th:text="${c.oracleTier()}"></span>
+                  <span class="case-title" th:text="${c.oracleRequiredRole().label()}"></span>
+                </td>
+                <td th:with="o=${baseline.outcome(c.caseId())}">
+                  <span th:if="${o.isPresent()}"
+                        th:class="${o.get().agreesWithOracle()} ? 'ok' : 'miss'"
+                        th:text="${o.get().decidedTier() + ' / ' + o.get().requiredRole()}"></span>
+                  <span th:if="${o.isPresent()}"
+                        th:class="${o.get().agreesWithOracle()} ? 'agreement-flag ok' : 'agreement-flag miss'"
+                        th:text="${o.get().agreesWithOracle()} ? 'matches oracle' : 'differs from oracle'"></span>
+                </td>
+                <td th:with="o=${advanced.outcome(c.caseId())}">
+                  <span th:if="${o.isPresent()}"
+                        th:class="${o.get().agreesWithOracle()} ? 'ok' : 'miss'"
+                        th:text="${o.get().decidedTier() + ' / ' + o.get().requiredRole()}"></span>
+                  <span th:if="${o.isPresent()}"
+                        th:class="${o.get().agreesWithOracle()} ? 'agreement-flag ok' : 'agreement-flag miss'"
+                        th:text="${o.get().agreesWithOracle()} ? 'matches oracle' : 'differs from oracle'"></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section id="findings" class="panel" aria-labelledby="findings-heading">
+    <span class="eyebrow">Safety evidence</span>
+    <h2 id="findings-heading">Findings</h2>
+    <p class="prose">The deterministic verifier produced
+      <strong th:text="${#lists.size(advanced.findings())}"></strong> findings, of which
+      <strong th:text="${#lists.size(blocking)}"></strong> are release-blocking. The blocking set is
+      shown first because it is the result that decides whether a change may ship.</p>
+    <p class="table-caption" id="cap-blocking">Release-blocking findings. Each one alone is sufficient to refuse a release.</p>
+    <div class="table-scroll t-xwide t-findings" tabindex="0">
+      <table aria-labelledby="cap-blocking">
+        <thead>
+          <tr>
+            <th scope="col" class="col-id">Finding</th>
+            <th scope="col" class="col-code">Code</th>
+            <th scope="col" class="col-severity">Severity</th>
+            <th scope="col" class="col-role">Role</th>
+            <th scope="col" class="col-explanation">Explanation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="finding : ${blocking}">
+            <th scope="row"><code th:text="${finding.findingId()}"></code></th>
+            <td><code th:text="${finding.explanationCode()}"></code></td>
+            <td class="severity" th:text="${finding.severity()}"></td>
+            <td th:text="${finding.requiredReviewerRole().label()}"></td>
+            <td th:text="${finding.explanation()}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary>Complete finding list
+        <span class="disclosure-count">(<span th:text="${#lists.size(advanced.findings())}"></span>)</span>
+      </summary>
+      <div class="details-body">
+        <p class="table-caption" id="cap-findings">Every finding the deterministic verifier produced for this run.</p>
+        <div class="table-scroll t-xwide t-findings" tabindex="0">
+          <table aria-labelledby="cap-findings">
+            <thead>
+              <tr>
+                <th scope="col" class="col-id">Finding</th>
+                <th scope="col" class="col-tier">Tier</th>
+                <th scope="col" class="col-severity">Severity</th>
+                <th scope="col" class="col-code">Code</th>
+                <th scope="col" class="col-role">Role</th>
+                <th scope="col" class="col-explanation">Explanation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="finding : ${advanced.findings()}">
+                <th scope="row"><code th:text="${finding.findingId()}"></code></th>
+                <td><span class="tier" th:classappend="${finding.decisionTier()}"
+                          th:text="${finding.decisionTier()}"></span></td>
+                <td class="severity" th:text="${finding.severity()}"></td>
+                <td><code th:text="${finding.explanationCode()}"></code></td>
+                <td th:text="${finding.requiredReviewerRole().label()}"></td>
+                <td th:text="${finding.explanation()}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section id="traces" class="panel" aria-labelledby="traces-heading">
+    <span class="eyebrow">Worked case and agent evidence</span>
+    <h2 id="traces-heading">Agent trajectories</h2>
+
+    <h3>Worked example: <code>CASE.15.DUTY.VIOLATION</code></h3>
+    <p class="prose">The three specialised agents disagree, and the disagreement changes nothing. The
+      Boundary Agent proposes <code>HUMAN_REQUIRED</code> because preparation and approval resolve to
+      the same role. The Repair Advisor proposes the smallest safe repair — return the approval step
+      to a role other than the preparing role, rather than moving preparation. The Rule Mapper is
+      weaker and wrong: it proposes only <code>AUTO_WITH_EXCEPTION</code>, at confidence 52.</p>
+    <p class="prose">The verifier neither votes nor averages. It blocks the unsafe variant on its own
+      structural evidence — <code>SEPARATION_OF_DUTIES_VIOLATED</code> over the step pair
+      <code>S.PREPARE</code> &#8594; <code>S.APPROVE</code> in the Findings section — and names
+      <code>LEGAL_REVIEWER</code> as the required authority. The weaker Rule Mapper proposal cannot
+      soften that outcome, and the per-case table under Baseline versus advanced shows the baseline
+      architecture missing this case entirely.</p>
+
+    <div class="notice notice--inline">
+      <strong class="notice-title">Advisory only.</strong>
+      <p>Every observation below is an agent <em>proposal</em>. The deterministic verifier
+        independently determines the findings in the Findings section, the required reviewer role and
+        the release outcome. No proposed tier, category, rationale or confidence value below can
+        authorise, block or alter a release. <code>AgentIndependenceTest</code> reproduces every
+        result on this page with each agent unavailable and with each agent returning hostile
+        output.</p>
+    </div>
+
+    <p class="prose note">Agents propose; they never decide. A trace with status <code>SKIPPED</code>
+      means no fixture existed, and the verdicts are unaffected either way.</p>
+
+    <details>
+      <summary>Agent trajectory summary
+        <span class="disclosure-count">(<span th:text="${#lists.size(advanced.traces())}"></span>
+          traces)</span>
+      </summary>
+      <div class="details-body">
+        <p class="table-caption" id="cap-traces">One row per agent invocation recorded in this run.</p>
+        <div class="table-scroll t-compact" tabindex="0">
+          <table aria-labelledby="cap-traces">
+            <thead>
+              <tr>
+                <th scope="col">Trace</th>
+                <th scope="col">Agent</th>
+                <th scope="col">Status</th>
+                <th scope="col">Retries</th>
+                <th scope="col">Observations</th>
+                <th scope="col">Events</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="trace : ${advanced.traces()}">
+                <th scope="row"><code th:text="${trace.traceId()}"></code></th>
+                <td th:text="${trace.agentId()}"></td>
+                <td th:text="${trace.status()}"></td>
+                <td class="numeric" th:text="${trace.retries()}"></td>
+                <td class="numeric" th:text="${#lists.size(trace.observations())}"></td>
+                <td class="numeric" th:text="${#lists.size(trace.events())}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Validated agent observations
+        <span class="disclosure-count">(<span th:text="${#lists.size(observations)}"></span>) —
+          advisory proposals</span>
+      </summary>
+      <div class="details-body">
+        <p class="table-caption" id="cap-observations">Every validated agent proposal, with the evidence each one cited. None of these values
+          changes a verdict.</p>
+        <div class="table-scroll t-xwide t-observations" tabindex="0">
+          <table aria-labelledby="cap-observations">
+            <thead>
+              <tr>
+                <th scope="col">Agent</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Proposed tier</th>
+                <th scope="col">Category</th>
+                <th scope="col">Confidence</th>
+                <th scope="col" class="col-rationale">Rationale (advisory)</th>
+                <th scope="col">Evidence cited</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="observation : ${observations}">
+                <td><code th:text="${observation.agentId()}"></code></td>
+                <td><code th:text="${observation.subject().key()}"></code></td>
+                <td><span class="tier" th:classappend="${observation.proposedTier()}"
+                          th:text="${observation.proposedTier()}"></span></td>
+                <td th:text="${observation.category().label()}"></td>
+                <td class="numeric" th:text="${observation.confidence()}"></td>
+                <td th:text="${observation.rationale()}"></td>
+                <td>
+                  <ul class="ref-list">
+                    <li th:each="reference : ${observation.references()}"
+                        th:text="${reference.kind() + ' ' + reference.targetId()}"></li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section id="comparison" class="panel" aria-labelledby="comparison-heading">
+    <span class="eyebrow">Structural change</span>
+    <h2 id="comparison-heading">Procedure version comparison</h2>
+    <dl class="kv">
+      <dt>Steps removed</dt>
+      <dd th:text="${comparison.removedStepIds()}"></dd>
+      <dt>Steps added</dt>
+      <dd th:text="${comparison.addedStepIds()}"></dd>
+      <dt>Appeal steps removed</dt>
+      <dd th:text="${comparison.removedAppealStepIds()}"></dd>
+      <dt>Duty constraints removed</dt>
+      <dd th:text="${comparison.removedDutyIds()}"></dd>
+    </dl>
+
+    <h3>Tier changes</h3>
+    <p class="table-caption" id="cap-tierchanges">Declared decision tier before and after the proposed change, per step.</p>
+    <div class="table-scroll t-compact" tabindex="0">
+      <table aria-labelledby="cap-tierchanges">
+        <thead>
+          <tr>
+            <th scope="col">Step</th>
+            <th scope="col">Existing</th>
+            <th scope="col">Proposed</th>
+            <th scope="col">Reduces human control?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="change : ${comparison.tierChanges()}">
+            <th scope="row"><code th:text="${change.stepId()}"></code></th>
+            <td><span class="tier" th:classappend="${change.existingTier()}"
+                      th:text="${change.existingTier()}"></span></td>
+            <td><span class="tier" th:classappend="${change.proposedTier()}"
+                      th:text="${change.proposedTier()}"></span></td>
+            <td th:text="${change.weakens()} ? 'yes' : 'no'"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="hnm" class="panel" aria-labelledby="hnm-heading">
+    <span class="eyebrow">Approved reasoning</span>
+    <h2 id="hnm-heading">Human Necessity Map</h2>
+    <p class="prose">The versioned record of why each human checkpoint is or is not required. Version
+      <code th:text="${map.version()}"></code>, hash
+      <code th:text="${#strings.substring(map.canonicalHash(),0,12)}"></code>.</p>
+
+    <details>
+      <summary>Complete Human Necessity Map
+        <span class="disclosure-count">(<span th:text="${#lists.size(map.entries())}"></span>
+          entries)</span>
+      </summary>
+      <div class="details-body">
+        <p class="table-caption" id="cap-hnm">Every mapped step, its effective tier, the role that must act and the reasoning recorded for
+          it.</p>
+        <div class="table-scroll t-hnm" tabindex="0">
+          <table aria-labelledby="cap-hnm">
+            <thead>
+              <tr>
+                <th scope="col" class="col-step">Step</th>
+                <th scope="col" class="col-category">Category</th>
+                <th scope="col" class="col-tier">Effective tier</th>
+                <th scope="col" class="col-role">Role</th>
+                <th scope="col" class="col-reversibility">Reversibility</th>
+                <th scope="col" class="col-why">Why</th>
+                <th scope="col" class="col-approved">Approved</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="entry : ${map.entries()}">
+                <th scope="row" class="col-step"><code th:text="${entry.stepId()}"></code></th>
+                <td class="col-category" th:text="${entry.category().label()}"></td>
+                <td class="col-tier"><span class="tier" th:classappend="${entry.effectiveTier()}"
+                          th:text="${entry.effectiveTier()}"></span></td>
+                <td class="col-role" th:text="${entry.requiredRole().label()}"></td>
+                <td class="col-reversibility" th:text="${entry.reversibility()}"></td>
+                <td class="col-why" th:text="${entry.reason()}"></td>
+                <td class="col-approved"
+                    th:text="${entry.approved()} ? 'yes' : 'no (treated as human-required)'"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section id="counterexamples" class="panel" aria-labelledby="counterexamples-heading">
+    <span class="eyebrow">Falsifiable evidence</span>
+    <h2 id="counterexamples-heading">Minimal counterexamples</h2>
+    <p class="prose">Each finding that can be falsified carries the smallest witness that
+      demonstrates it. There are
+      <strong th:text="${#lists.size(counterexamples)}"></strong> in this run.</p>
+
+    <details>
+      <summary>Complete counterexamples
+        <span class="disclosure-count">(<span th:text="${#lists.size(counterexamples)}"></span>)</span>
+      </summary>
+      <div class="details-body">
+        <p class="table-caption" id="cap-counterexamples">The minimal witness recorded for every falsifiable finding.</p>
+        <div class="table-scroll t-wide" tabindex="0">
+          <table aria-labelledby="cap-counterexamples">
+            <thead>
+              <tr>
+                <th scope="col">Witness</th>
+                <th scope="col">Kind</th>
+                <th scope="col">What it shows</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="finding : ${counterexamples}">
+                <th scope="row"><code th:text="${finding.counterexample().get().witnessPath()}"></code></th>
+                <td th:text="${finding.counterexample().get().kind()}"></td>
+                <td th:text="${finding.counterexample().get().description()}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section id="repro" class="panel" aria-labelledby="repro-heading">
+    <span class="eyebrow">Verification</span>
+    <h2 id="repro-heading">Reproducibility</h2>
+    <p class="prose">Re-run <code>./mvnw verify</code> and re-open this page: the canonical hashes
+      below must be identical. They exclude the run identifier and every wall-clock measurement,
+      which differ between two identical runs by construction.</p>
+
+    <details>
+      <summary>Canonical identifiers and hashes</summary>
+      <div class="details-body">
+        <dl class="kv">
+          <dt>Advanced run identifier</dt>
+          <dd><code class="hash" th:text="${advanced.runId()}"></code></dd>
+          <dt>Advanced canonical hash</dt>
+          <dd><code class="hash" th:text="${advanced.canonicalHash()}"></code></dd>
+          <dt>Baseline canonical hash</dt>
+          <dd><code class="hash" th:text="${baseline.canonicalHash()}"></code></dd>
+          <dt>Policy pack</dt>
+          <dd><code class="hash"
+                    th:text="${advanced.policyPackId() + ' @ ' + advanced.policyHash()}"></code></dd>
+          <dt>Human Necessity Map hash</dt>
+          <dd><code class="hash" th:text="${advanced.humanNecessityMapHash()}"></code></dd>
+          <dt>Existing version hash</dt>
+          <dd><code class="hash" th:text="${advanced.existingVersionHash()}"></code></dd>
+          <dt>Proposed version hash</dt>
+          <dd><code class="hash" th:text="${advanced.proposedVersionHash()}"></code></dd>
+          <dt>Rule engine</dt>
+          <dd><code class="hash" th:text="${advanced.ruleEngineVersion()}"></code></dd>
+          <dt>Verifier</dt>
+          <dd><code class="hash" th:text="${advanced.verifierVersion()}"></code></dd>
+        </dl>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="shell">
+    <p>CivLint — deterministic regression and human-judgment review for public procedures. This page
+      is read-only: opening it stores nothing.</p>
+    <ul class="footer-meta">
+      <li>Author: Buddy Guzman (bguzman)</li>
+      <li>Data mode: <code>DEMO</code></li>
+      <li>Rule engine: <code th:text="${advanced.ruleEngineVersion()}"></code></li>
+      <li>Verifier: <code th:text="${advanced.verifierVersion()}"></code></li>
+      <li>Policy pack: <code th:text="${advanced.policyPackId()}"></code></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>

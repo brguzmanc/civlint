@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.14.APPEAL.REMOVED",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NOAPPEAL"
+      },
+      "proposedTier": "AUTO_WITH_EXCEPTION",
+      "category": "APPEAL_RIGHTS",
+      "rationale": "The proposed version has fewer steps than the existing one.",
+      "confidence": 60,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

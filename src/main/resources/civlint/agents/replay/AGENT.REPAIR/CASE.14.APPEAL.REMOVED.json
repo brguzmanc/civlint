@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.REPAIR",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RA.14.APPEAL.REMOVED",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NOAPPEAL"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "APPEAL_RIGHTS",
+      "rationale": "Smallest safe repair: restore the appeal adjudication step and the notification transition that reaches it, leaving every automated check in place. Do not compensate by adding review elsewhere.",
+      "confidence": 88,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

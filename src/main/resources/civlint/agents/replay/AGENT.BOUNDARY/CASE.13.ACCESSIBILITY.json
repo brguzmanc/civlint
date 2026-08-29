@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.BOUNDARY",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.BC.13.ACCESSIBILITY",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.13.ACCESSIBILITY"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "ACCESSIBILITY",
+      "rationale": "Whether the alternative evidence offered is adequate is a judgement about this applicant's circumstances.",
+      "confidence": 93,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.13.ACCESSIBILITY",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

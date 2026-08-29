@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.02.DIACRITIC",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.02.DIACRITIC"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "The values differ only by combining marks, which fold under a published rule.",
+      "confidence": 90,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.02.DIACRITIC",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.GENERALIST",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.GEN.03.WHITESPACE",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.03.WHITESPACE"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "The difference is only capitalisation and spacing.",
+      "confidence": 81,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.03.WHITESPACE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

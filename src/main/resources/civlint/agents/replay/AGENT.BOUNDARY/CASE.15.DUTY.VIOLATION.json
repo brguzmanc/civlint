@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.BOUNDARY",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.BC.15.DUTY.VIOLATION",
+      "subject": {
+        "type": "VERSION",
+        "id": "V2.NOSOD"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "SEPARATION_OF_DUTIES",
+      "rationale": "Preparation and approval resolve to the same role in the proposed version.",
+      "confidence": 84,
+      "references": [
+        {
+          "kind": "PROCEDURE_STEP",
+          "targetId": "S.APPROVE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

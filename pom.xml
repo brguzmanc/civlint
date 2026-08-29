@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CivLint build definition.
+  Author: Buddy Guzman (bguzman)
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.1.1</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.bguzman</groupId>
+  <artifactId>civlint</artifactId>
+  <version>0.1.0</version>
+  <name>CivLint</name>
+  <description>Deterministic regression and human-judgment optimization tool for public procedures</description>
+
+  <properties>
+    <java.version>25</java.version>
+    <maven.compiler.release>25</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Reproducible build: fixed timestamp so artifacts are byte-stable. -->
+    <project.build.outputTimestamp>2026-08-28T00:00:00Z</project.build.outputTimestamp>
+
+    <!-- H2 2.3.232 is the newest version Flyway 12.4.0 reports as verified. -->
+    <h2.version>2.3.232</h2.version>
+
+    <!-- Security patch override: the Boot 4.1.1 BOM resolves Tomcat 11.0.24, which Apache lists as
+         affected by vulnerabilities fixed in 11.0.25. -->
+    <tomcat.version>11.0.25</tomcat.version>
+
+    <!-- Mockito is supplied by Boot's test starter; explicit attachment is required on modern JDKs. -->
+    <test.jvm.args>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar -Xshare:off</test.jvm.args>
+
+    <!-- Not managed by the Spring Boot BOM; pinned to a stable release. -->
+    <jacoco.version>0.8.15</jacoco.version>
+    <spring-modulith.version>2.1.1</spring-modulith.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.modulith</groupId>
+        <artifactId>spring-modulith-bom</artifactId>
+        <version>${spring-modulith.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- REST + server-rendered dashboard. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <!-- Persistence of runs, findings, metrics, traces (adapter layer only). -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <!--
+      Schema migrations. Spring Boot 4 moved Flyway autoconfiguration out of the core autoconfigure
+      jar into its own module, so flyway-core alone gets no autoconfiguration and migrations would
+      silently never run. The starter pulls in both. H2 support ships inside flyway-core itself;
+      there is no flyway-database-h2 artifact at 12.4.0.
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-flyway</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!-- Health endpoint only; sensitive endpoints stay disabled. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <!-- Module declarations at runtime; boundary verification is test-only. -->
+    <dependency>
+      <groupId>org.springframework.modulith</groupId>
+      <artifactId>spring-modulith-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.modulith</groupId>
+      <artifactId>spring-modulith-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <compilerArgs>
+            <arg>-Xlint:all,-serial,-processing</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+
+      <!-- Mechanically enforces the stable-release-only version policy. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-version-policy</id>
+            <goals><goal>enforce</goal></goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion><version>[25,)</version></requireJavaVersion>
+                <requireMavenVersion><version>[3.9.0,)</version></requireMavenVersion>
+                <requireReleaseDeps>
+                  <message>No SNAPSHOT dependencies are permitted.</message>
+                </requireReleaseDeps>
+                <banDynamicVersions>
+                  <message>Dynamic/range versions make builds irreproducible.</message>
+                  <allowSnapshots>false</allowSnapshots>
+                </banDynamicVersions>
+                <banDuplicatePomDependencyVersions/>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes><exclude>**/*IT.java</exclude></excludes>
+          <argLine>@{argLine} ${test.jvm.args}</argLine>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <argLine>@{argLine} ${test.jvm.args}</argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <goals><goal>integration-test</goal><goal>verify</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <executions>
+          <execution><id>prepare</id><goals><goal>prepare-agent</goal></goals></execution>
+          <execution>
+            <id>report-and-check</id>
+            <phase>verify</phase>
+            <goals><goal>report</goal><goal>check</goal></goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>BUNDLE</element>
+                  <limits>
+                    <limit><counter>LINE</counter><value>COVEREDRATIO</value><minimum>0.90</minimum></limit>
+                    <limit><counter>BRANCH</counter><value>COVEREDRATIO</value><minimum>0.80</minimum></limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <doclint>all,-missing</doclint>
+          <quiet>true</quiet>
+          <author>true</author>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

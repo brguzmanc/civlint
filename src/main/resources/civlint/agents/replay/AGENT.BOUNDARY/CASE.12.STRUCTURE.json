@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.BOUNDARY",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.BC.12.STRUCTURE",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.12.STRUCTURE"
+      },
+      "proposedTier": "HUMAN_REQUIRED",
+      "category": "IDENTITY_CONSISTENCY",
+      "rationale": "The number of name parts changes; no normalisation rule covers this, so equality must not be asserted.",
+      "confidence": 86,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.12.STRUCTURE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.BOUNDARY",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.BC.08.CERTIFIED.NAMECHANGE",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.08.CERTIFIED.NAMECHANGE"
+      },
+      "proposedTier": "AUTO_WITH_EXCEPTION",
+      "category": "IDENTITY_CONSISTENCY",
+      "rationale": "The recorded content changes, which is distinct from a formatting normalisation even when authority is supplied.",
+      "confidence": 78,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.08.CERTIFIED.NAMECHANGE",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

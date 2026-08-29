@@ -1,0 +1,24 @@
+{
+  "agentId": "AGENT.RULEMAPPER",
+  "agentVersion": "0.1.0",
+  "observations": [
+    {
+      "observationId": "OBS.RM.06.HISTORICAL",
+      "subject": {
+        "type": "CASE",
+        "id": "CASE.06.HISTORICAL"
+      },
+      "proposedTier": "AUTOMATE",
+      "category": "MECHANICAL",
+      "rationale": "The request compares against the historical entry without altering it.",
+      "confidence": 85,
+      "references": [
+        {
+          "kind": "CASE_REQUEST",
+          "targetId": "CASE.06.HISTORICAL",
+          "description": "Input examined by the agent"
+        }
+      ]
+    }
+  ]
+}

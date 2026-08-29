@@ -1,0 +1,1030 @@
+/*
+ * CivLint dashboard stylesheet.
+ *
+ * One local file, no build step, no remote import, no font download. Light and dark are both
+ * fully specified rather than left to the browser, because the previous revision declared
+ * `color-scheme: light dark` while colouring only for light and produced white-on-white cells.
+ */
+
+/* ---------------------------------------------------------------------------------------------
+ * 1. Theme tokens
+ * ------------------------------------------------------------------------------------------ */
+
+:root {
+  color-scheme: light;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+
+  --page-bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --surface-muted: #eef2f7;
+  --surface-strong: #e2e8f0;
+  --text: #122033;
+  --text-muted: #526175;
+  --heading: #0f2742;
+  --border: #c5d0dd;
+  --border-strong: #94a3b8;
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
+  --accent: #4f46e5;
+  --focus: #b45309;
+  --code-bg: #e8eef6;
+  --code-text: #172554;
+  --table-header-bg: #dfe8f2;
+  --table-header-text: #10243d;
+  --row-header-bg: #edf3f8;
+  --row-header-text: #16283e;
+
+  /* Synthetic-data notice: informative, not destructive. */
+  --notice-bg: #fdf4dc;
+  --notice-text: #4a3410;
+  --notice-border: #d69e2e;
+
+  /* Decision tiers. Every badge also carries its own text. */
+  --tier-automate-bg: #dcfce7;
+  --tier-automate-text: #166534;
+  --tier-automate-border: #86efac;
+  --tier-exception-bg: #fef3c7;
+  --tier-exception-text: #854d0e;
+  --tier-exception-border: #fcd34d;
+  --tier-human-bg: #dbeafe;
+  --tier-human-text: #1e40af;
+  --tier-human-border: #93c5fd;
+  --tier-blocked-bg: #fee2e2;
+  --tier-blocked-text: #991b1b;
+  --tier-blocked-border: #fca5a5;
+
+  --positive-text: #166534;
+  --negative-text: #991b1b;
+  --caution-text: #92400e;
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow: 0 1px 2px rgb(15 39 66 / 6%), 0 8px 24px -18px rgb(15 39 66 / 28%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --page-bg: #08111f;
+    --surface: #101b2d;
+    --surface-elevated: #142238;
+    --surface-muted: #17243a;
+    --surface-strong: #1e304b;
+    --text: #f8fafc;
+    --text-muted: #cbd5e1;
+    --heading: #f8fafc;
+    --border: #334a63;
+    --border-strong: #5f7894;
+    --primary: #93c5fd;
+    --primary-hover: #bfdbfe;
+    --accent: #a5b4fc;
+    --focus: #fbbf24;
+    --code-bg: #0c1728;
+    --code-text: #dbeafe;
+    --table-header-bg: #1e304b;
+    --table-header-text: #f8fafc;
+    --row-header-bg: #17243a;
+    --row-header-text: #f1f5f9;
+
+    --notice-bg: #33240a;
+    --notice-text: #fde9b5;
+    --notice-border: #d69e2e;
+
+    --tier-automate-bg: #153b2a;
+    --tier-automate-text: #bbf7d0;
+    --tier-automate-border: #3f8f65;
+    --tier-exception-bg: #422f0d;
+    --tier-exception-text: #fde68a;
+    --tier-exception-border: #a16207;
+    --tier-human-bg: #172554;
+    --tier-human-text: #bfdbfe;
+    --tier-human-border: #3b82f6;
+    --tier-blocked-bg: #450a0a;
+    --tier-blocked-text: #fecaca;
+    --tier-blocked-border: #b91c1c;
+
+    --positive-text: #86efac;
+    --negative-text: #fca5a5;
+    --caution-text: #fcd34d;
+
+    --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 10px 28px -20px rgb(0 0 0 / 70%);
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 2. Reset and page shell
+ * ------------------------------------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--page-bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  line-height: 1.6;
+}
+
+.shell {
+  width: min(100% - 2rem, 1280px);
+  margin-inline: auto;
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+@media (max-width: 29.99em) {
+  .shell {
+    width: min(100% - 1rem, 1280px);
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10;
+  padding: 0.75rem 1.25rem;
+  min-height: 2.75rem;
+  background-color: var(--surface-elevated);
+  color: var(--primary);
+  border: 2px solid var(--focus);
+  border-radius: 0 0 var(--radius) 0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 3. Typography
+ * ------------------------------------------------------------------------------------------ */
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--heading);
+  line-height: 1.25;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.35rem + 1.7vw, 2.5rem);
+  letter-spacing: -0.015em;
+}
+
+h2 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  margin: 1.75rem 0 0.6rem;
+  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.2rem);
+}
+
+p {
+  margin: 0 0 0.9rem;
+}
+
+.prose {
+  max-width: 74ch;
+}
+
+.lede {
+  margin: 0.5rem 0 0;
+  color: var(--text-muted);
+  font-size: clamp(1rem, 0.96rem + 0.25vw, 1.15rem);
+  max-width: 68ch;
+}
+
+.byline {
+  margin: 0.75rem 0 0;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.byline .byline-label {
+  color: var(--text-muted);
+}
+
+.eyebrow {
+  display: block;
+  margin: 0 0 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.note {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 4. Links
+ * ------------------------------------------------------------------------------------------ */
+
+a {
+  color: var(--primary);
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.16em;
+  overflow-wrap: break-word;
+}
+
+a:visited {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+a:active {
+  color: var(--primary-hover);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 5. Header, navigation, footer
+ * ------------------------------------------------------------------------------------------ */
+
+.masthead {
+  background-color: var(--surface-elevated);
+  border-bottom: 1px solid var(--border);
+}
+
+.masthead-inner {
+  padding: clamp(1.5rem, 1rem + 2.5vw, 2.75rem) 0 clamp(1.25rem, 1rem + 1.5vw, 2rem);
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.wordmark-mark {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+.wordmark-text {
+  min-width: 0;
+}
+
+.site-nav > h2 {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 0.5rem;
+}
+
+.nav-list > li {
+  min-width: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 120ms linear, border-color 120ms linear;
+}
+
+/* In-page anchors are always "visited" once used; state them explicitly so no browser default
+   purple appears in either theme. */
+.nav-link:visited {
+  color: var(--primary);
+}
+
+.nav-link:hover {
+  background-color: var(--surface-strong);
+  border-color: var(--border-strong);
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.site-footer {
+  margin-top: 2.5rem;
+  padding: 1.5rem 0 2.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.site-footer p {
+  margin: 0 0 0.4rem;
+}
+
+.footer-meta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+}
+
+.footer-meta > li {
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 6. Cards and sections
+ * ------------------------------------------------------------------------------------------ */
+
+main {
+  display: block;
+  padding-bottom: 1rem;
+}
+
+.panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: clamp(1rem, 0.75rem + 1.4vw, 1.75rem);
+  margin: 0 0 clamp(1rem, 0.85rem + 0.7vw, 1.5rem);
+  /* Anchor links must land above the heading, not on top of it. */
+  scroll-margin-top: 1rem;
+}
+
+.panel > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 7. Synthetic-data notice
+ * ------------------------------------------------------------------------------------------ */
+
+.notice {
+  background-color: var(--notice-bg);
+  color: var(--notice-text);
+  border: 1px solid var(--notice-border);
+  border-left-width: 5px;
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+  margin: 0 0 clamp(1rem, 0.85rem + 0.7vw, 1.5rem);
+}
+
+.notice :last-child {
+  margin-bottom: 0;
+}
+
+.notice-title {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.notice code {
+  background-color: rgb(0 0 0 / 8%);
+  color: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+  .notice code {
+    background-color: rgb(255 255 255 / 10%);
+  }
+}
+
+.notice--inline {
+  margin: 1.5rem 0;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 8. Executive summary
+ * ------------------------------------------------------------------------------------------ */
+
+.summary-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.85rem;
+}
+
+.summary-card {
+  min-width: 0;
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+}
+
+.summary-label {
+  display: block;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.45rem;
+}
+
+.summary-value {
+  display: block;
+  margin: 0;
+  color: var(--heading);
+  font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.summary-value .tier {
+  font-size: 0.95rem;
+  vertical-align: 0.2em;
+}
+
+.summary-note {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.45;
+}
+
+@media (max-width: 29.99em) {
+  .summary-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 9. Key/value definition lists
+ * ------------------------------------------------------------------------------------------ */
+
+.kv {
+  margin: 0 0 1rem;
+  display: grid;
+  grid-template-columns: minmax(11rem, 20rem) minmax(0, 1fr);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background-color: var(--surface);
+}
+
+.kv > dt {
+  grid-column: 1;
+  margin: 0;
+  padding: 0.6rem 0.85rem;
+  min-width: 0;
+  background-color: var(--row-header-bg);
+  color: var(--row-header-text);
+  font-weight: 600;
+  border-top: 1px solid var(--border);
+  overflow-wrap: break-word;
+}
+
+.kv > dd {
+  grid-column: 2;
+  margin: 0;
+  padding: 0.6rem 0.85rem;
+  min-width: 0;
+  background-color: var(--surface);
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+
+.kv > dt:first-of-type,
+.kv > dt:first-of-type + dd {
+  border-top: 0;
+}
+
+@media (max-width: 47.99em) {
+  .kv {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kv > dt,
+  .kv > dd {
+    grid-column: 1;
+  }
+
+  .kv > dd {
+    border-top: 0;
+    padding-top: 0.15rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .kv > dt {
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 10. Tables
+ * ------------------------------------------------------------------------------------------ */
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+  margin: 0 0 1rem;
+}
+
+.table-scroll:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 1px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9375rem;
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.table-caption {
+  margin: 0 0 0.45rem;
+  max-width: 78ch;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+thead th {
+  background-color: var(--table-header-bg);
+  color: var(--table-header-text);
+  text-align: left;
+  vertical-align: bottom;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+tbody th[scope="row"] {
+  background-color: var(--row-header-bg);
+  color: var(--row-header-text);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 600;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+
+tbody td {
+  background-color: var(--surface);
+  color: var(--text);
+  text-align: left;
+  vertical-align: top;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: break-word;
+}
+
+tbody tr:last-child > th,
+tbody tr:last-child > td {
+  border-bottom: 0;
+}
+
+td.numeric,
+th.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Minimum widths belong to the table inside its own scroll region, never to the page. */
+.t-compact table {
+  min-width: 44rem;
+}
+
+.t-wide table {
+  min-width: 52rem;
+}
+
+.t-xwide table {
+  min-width: 70rem;
+}
+
+.t-hnm table {
+  min-width: 70rem;
+}
+
+/*
+ * Column sizing pattern for tables with one narrative column.
+ *
+ * The narrow columns declare `width: 1%` plus a floor, which asks auto table layout to keep them
+ * at that floor. The narrative column declares `width: 100%`, so every pixel left over after the
+ * floors are satisfied goes to it. Without this the leftover is shared proportionally and the
+ * explanatory column ends up as a thin vertical paragraph even on a wide desktop.
+ */
+.t-hnm .col-step,
+.t-hnm .col-category,
+.t-hnm .col-tier,
+.t-hnm .col-role,
+.t-hnm .col-reversibility,
+.t-hnm .col-approved {
+  width: 1%;
+}
+
+.t-hnm .col-step {
+  min-width: 10.5rem;
+}
+
+.t-hnm .col-category {
+  min-width: 8rem;
+}
+
+.t-hnm .col-tier {
+  min-width: 9.5rem;
+}
+
+.t-hnm .col-role {
+  min-width: 8rem;
+}
+
+.t-hnm .col-reversibility {
+  min-width: 7.5rem;
+}
+
+.t-hnm .col-approved {
+  min-width: 6.5rem;
+}
+
+/*
+ * Reversibility values are single unbreakable tokens such as REVERSIBLE_WITH_BURDEN. Left alone
+ * their min-content width claims about 200px of the row, which is space the argument column needs
+ * more, so they are allowed to wrap.
+ */
+.t-hnm .col-reversibility {
+  overflow-wrap: anywhere;
+}
+
+/* Tighter gutters on the widest table, so the whole map fits a laptop without scrolling. */
+.t-hnm th,
+.t-hnm td {
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+/* The "Why" column carries the argument, so it absorbs the remaining width and wraps naturally. */
+.t-hnm .col-why {
+  width: 100%;
+  min-width: 19rem;
+}
+
+.t-findings .col-id,
+.t-findings .col-tier,
+.t-findings .col-severity,
+.t-findings .col-code,
+.t-findings .col-role {
+  width: 1%;
+}
+
+.t-findings .col-id {
+  min-width: 13rem;
+}
+
+.t-findings .col-tier {
+  min-width: 9.5rem;
+}
+
+.t-findings .col-severity {
+  min-width: 6.5rem;
+}
+
+.t-findings .col-code {
+  min-width: 12rem;
+}
+
+.t-findings .col-role {
+  min-width: 8.5rem;
+}
+
+.t-findings .col-explanation {
+  width: 100%;
+  min-width: 20rem;
+}
+
+.t-observations .col-rationale {
+  width: 100%;
+  min-width: 20rem;
+}
+
+.case-id {
+  display: block;
+}
+
+.case-title {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 11. Status, tiers and outcome text
+ * ------------------------------------------------------------------------------------------ */
+
+.tier {
+  display: inline-block;
+  padding: 0.12rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  background-color: var(--surface-muted);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.tier.AUTOMATE {
+  background-color: var(--tier-automate-bg);
+  color: var(--tier-automate-text);
+  border-color: var(--tier-automate-border);
+}
+
+.tier.AUTO_WITH_EXCEPTION {
+  background-color: var(--tier-exception-bg);
+  color: var(--tier-exception-text);
+  border-color: var(--tier-exception-border);
+}
+
+.tier.HUMAN_REQUIRED {
+  background-color: var(--tier-human-bg);
+  color: var(--tier-human-text);
+  border-color: var(--tier-human-border);
+}
+
+.tier.RELEASE_BLOCKED {
+  background-color: var(--tier-blocked-bg);
+  color: var(--tier-blocked-text);
+  border-color: var(--tier-blocked-border);
+}
+
+.tier.ALLOW {
+  background-color: var(--tier-automate-bg);
+  color: var(--tier-automate-text);
+  border-color: var(--tier-automate-border);
+}
+
+.tier.BLOCK {
+  background-color: var(--tier-blocked-bg);
+  color: var(--tier-blocked-text);
+  border-color: var(--tier-blocked-border);
+}
+
+.outcome {
+  display: block;
+  margin-top: 0.35rem;
+  font-weight: 400;
+}
+
+.ok {
+  color: var(--positive-text);
+  font-weight: 600;
+}
+
+.miss {
+  color: var(--negative-text);
+  font-weight: 600;
+}
+
+/* Agreement is stated in words as well as colour. */
+.agreement-flag {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.unavailable {
+  color: var(--caution-text);
+  font-style: italic;
+}
+
+.severity {
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 12. Code, identifiers and hashes
+ * ------------------------------------------------------------------------------------------ */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--code-bg);
+  color: var(--code-text);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+
+/* Canonical hashes are never truncated; they wrap inside their own cell instead. */
+.hash {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.ref-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ref-list > li {
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 13. Progressive disclosure
+ * ------------------------------------------------------------------------------------------ */
+
+details {
+  margin: 1rem 0;
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+summary {
+  display: list-item;
+  padding: 0.7rem 1rem 0.7rem 2rem;
+  min-height: 2.75rem;
+  color: var(--heading);
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: background-color 120ms linear;
+}
+
+summary:hover {
+  background-color: var(--surface-strong);
+}
+
+summary::marker {
+  color: var(--primary);
+}
+
+details[open] > summary {
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.disclosure-count {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.details-body {
+  padding: 1rem;
+}
+
+.details-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------------------------
+ * 14. Accessibility media features
+ * ------------------------------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  /* Forced colours stay in force. Only structure that would otherwise disappear is restored. */
+  .panel,
+  .notice,
+  .summary-card,
+  .kv,
+  .table-scroll,
+  details,
+  .nav-link,
+  .wordmark-mark {
+    border: 1px solid CanvasText;
+  }
+
+  .tier {
+    border: 1px solid CanvasText;
+  }
+
+  .kv > dt,
+  .kv > dd,
+  thead th,
+  tbody th[scope="row"],
+  tbody td {
+    border-color: CanvasText;
+  }
+
+  thead th {
+    border-bottom: 2px solid CanvasText;
+  }
+
+  :focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .skip-link {
+    border-color: CanvasText;
+  }
+}
+
+@media print {
+  body {
+    background-color: #ffffff;
+  }
+
+  .site-nav,
+  .skip-link {
+    display: none;
+  }
+
+  details {
+    break-inside: avoid;
+  }
+}
