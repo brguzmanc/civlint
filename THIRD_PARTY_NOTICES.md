@@ -7,7 +7,7 @@ Every third-party component is used according to its own licence. This is not a 
 The submitted source archive does **not** include `target/`, a dependency cache or copied third-party
 JARs. Maven resolves dependencies from their publishers under the licenses of those projects.
 
-## Direct project dependencies
+## Direct project dependencies and build tools
 
 | Component | Scope | Version source | Project license |
 |---|---|---|---|
@@ -18,6 +18,10 @@ JARs. Maven resolves dependencies from their publishers under the licenses of th
 | Spring Modulith Core | test | Spring Modulith 2.1.1 BOM | Apache-2.0 |
 | JaCoCo Maven Plugin | build/test | 0.8.15 | EPL-2.0 |
 | Apache Maven Wrapper | build | Maven 3.9.14 distribution | Apache-2.0 |
+| Maven Checkstyle Plugin | build | 3.6.0 | Apache-2.0 |
+| Checkstyle | build | 14.0.0 | LGPL-2.1-or-later |
+| SpotBugs Maven Plugin | build | 4.10.4.0 | Apache-2.0 |
+| SpotBugs engine | build | 4.10.4, resolved by the Maven plugin | LGPL-2.1-or-later |
 
 Transitive libraries include Spring Framework, Hibernate ORM, Flyway, Thymeleaf, Tomcat, Jackson,
 JUnit, AssertJ, ArchUnit, Logback, Mockito, SLF4J and their dependencies. Licenses vary by component

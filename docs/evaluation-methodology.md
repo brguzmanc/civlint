@@ -141,8 +141,10 @@ The full Maven quality gate includes:
 - dataset-port consistency and replaceability tests;
 - a real HTTP integration suite with Flyway, JPA, dashboard rendering and closed admin endpoints;
 - an evidence-surface check asserting that the artifact, report, dashboard, `POST`-body digest and
-  stored-report hashes are one number per architecture; and
-- a JaCoCo bundle gate of at least 90% line and 80% branch coverage.
+  stored-report hashes are one number per architecture;
+- a JaCoCo bundle gate of at least 90% line and 80% branch coverage;
+- zero Checkstyle violations at the configured error threshold; and
+- zero non-excluded SpotBugs findings at the configured medium-or-higher threshold.
 
 Final measured coverage: 93.79% instructions, 87.13% branches and 93.28% lines.
 

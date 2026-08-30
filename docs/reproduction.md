@@ -37,7 +37,9 @@ java -version
 ```
 
 Expected result: `BUILD SUCCESS`, all unit and integration tests passing, JaCoCo at or above 90% line
-and 80% branch coverage, and no generated-evidence drift.
+and 80% branch coverage, zero Checkstyle violations at the configured error threshold, zero
+non-excluded SpotBugs findings at the configured medium-or-higher threshold, and no
+generated-evidence drift.
 
 The Maven wrapper downloads Maven 3.9.14 from Maven Central. After dependencies are cached, an offline
 verification is possible:
