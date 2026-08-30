@@ -146,7 +146,7 @@ The full Maven quality gate includes:
 - zero Checkstyle violations at the configured error threshold; and
 - zero non-excluded SpotBugs findings at the configured medium-or-higher threshold.
 
-Final measured coverage: 93.79% instructions, 87.13% branches and 93.28% lines.
+Final measured coverage: 93.78% instructions, 87.05% branches and 93.26% lines.
 
 Coverage is not proof that the policy is correct. The important remaining gap is independent domain
 validation: the same author created the policy, oracle and verifier.
