@@ -73,5 +73,7 @@ jobs:
             target/failsafe-reports/
             target/site/jacoco/
             target/site/apidocs/
+            target/checkstyle-result.xml
+            target/spotbugsXml.xml
           if-no-files-found: warn
           retention-days: 14

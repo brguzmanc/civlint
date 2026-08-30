@@ -32,11 +32,24 @@ public sealed interface Json {
      * @param members object members, kept sorted by name in code-point order
      */
     record Obj(SequencedMap<String, Json> members) implements Json {
-        public Obj(Map<String, Json> members) {
-            this(sorted(members));
+
+        /** Sorts and copies here, not in the {@link Map} overload, so no caller can skip it. */
+        public Obj {
+            members = sorted(members);
         }
 
-        private static SequencedMap<String, Json> sorted(Map<String, Json> members) {
+        public Obj(Map<String, Json> members) {
+            this(asSequenced(members));
+        }
+
+        private static SequencedMap<String, Json> asSequenced(Map<String, Json> members) {
+            Objects.requireNonNull(members, "members");
+            return members instanceof SequencedMap<String, Json> sequenced
+                    ? sequenced
+                    : new LinkedHashMap<>(members);
+        }
+
+        private static SequencedMap<String, Json> sorted(SequencedMap<String, Json> members) {
             Objects.requireNonNull(members, "members");
             // TreeMap with natural String ordering == code-point ordering for the ASCII member
             // names CivLint emits, which is what the canonical form requires.

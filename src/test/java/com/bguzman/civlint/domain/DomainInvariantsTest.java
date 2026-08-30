@@ -536,7 +536,8 @@ class DomainInvariantsTest {
             EvidenceItem item = new EvidenceItem(
                     "E.X", EvidenceType.IDENTITY_DOCUMENT, "Office", "REF", true, true, new TreeMap<>());
             assertThatThrownBy(() -> new CorrectionRequest(
-                            "CASE.X", record(), new TreeMap<>(), List.of(item, item), EnumSet.noneOf(RequestFlag.class)))
+                            "CASE.X", record(), new TreeMap<>(), List.of(item, item),
+                            EnumSet.noneOf(RequestFlag.class)))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("Duplicate evidence identifier");
         }

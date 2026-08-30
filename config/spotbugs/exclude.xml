@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SpotBugs exclusions for CivLint.
+-->
+<FindBugsFilter
+    xmlns="https://github.com/spotbugs/filter/3.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/master/spotbugs/etc/findbugsfilter.xsd">
+
+  <!--
+    SpotBugs does not follow collections through the List.copyOf / .toList() /
+    unmodifiableSequencedMap call each canonical constructor in these packages applies. Scoped by
+    package, not globally, so a type without that normalization still fails.
+  -->
+  <Match>
+    <Package name="~com\.bguzman\.civlint\.(domain|agents|procedure|verification|support)"/>
+    <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+  </Match>
+
+  <!-- Validating constructors are the design; all affected types are records or final. -->
+  <Match>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+</FindBugsFilter>

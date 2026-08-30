@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<!--
+  Checkstyle suppressions for CivLint.
+-->
+<suppressions>
+  <!-- Spring instantiates this configuration class reflectively; the constructor is
+       package-private by design, so the rule's private-constructor demand does not apply. -->
+  <suppress files="[\\/]CivLintApplication\.java$" checks="HideUtilityClassConstructor"/>
+</suppressions>
